@@ -38,6 +38,9 @@ description: hexo博客搭建，一些个性化配置
 
 **NOTE: All operations (such as installing) are done in the BLOG directory**: `~/BLOG`
 
+## Multi folder in '_post'
+![multifolder](./hexo-blog/multifolder.png)
+
 ## Latex
 
 **reference**: https://blog.csdn.net/crazy_scott/article/details/79293576

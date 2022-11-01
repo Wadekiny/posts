@@ -9,9 +9,33 @@ description: todo list
 
 
 
-团支书-团委
-无线电
-同仁堂
+目的：
+恢复更仿真的人脸：
+
+回归3dmm参数生成大致shape和texture
+学习text2face的方法，分开面部部件，shape上分开？分开才能精细可控
+hair eye
+
+额外的uv图用来恢复高清细节
+
+模型去除光照渲染
+反射率之类的东西
+部件gcn
+meshgcn
+
+
+粗-细
+眼镜
+
+
+pyright opencv
+clash for windows git加速(还是用qv2ray把)
+舞蹈和人脸合成一起
+
+纹理细节为什么不好？
+
+
+无线电 群里的论文
 expgan
 
 
@@ -38,5 +62,16 @@ coc补全边框圆角显示问题巴拉巴拉，是alacritty的问题，更新�
 system: asd2123
 ranger:select-editor
 
-hexo 本身支持post下多个子文件夹
+
+
+
+
+
+
+
+
+
+
+
+
 
