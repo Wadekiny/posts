@@ -151,6 +151,7 @@ description: (CVPR2021)通过网络内部的优化器迭代优化'face rig'：ri
     $$
 
     在第一个阶段，使用了BFM模型。$\overline V , B_{bfm}$ 分别是平均人脸mesh和PCA中的基
+    
     > A 3d face model for pose and illumination invariant face recognition. In 2009 Sixth IEEE International Conference on Advanced Video and Signal Based Surveillance, pages 296–301, 2009. 4, 5
 
 ![neutral-shape](./riggable-3d-face-reconstruction/neutral-shape.png)
@@ -171,7 +172,7 @@ description: (CVPR2021)通过网络内部的优化器迭代优化'face rig'：ri
 - 公式：
     $$
     D_{exp} = F_{exp\_cnn}(F_{exp\_mlp}(\beta;\theta_{mlp}))\\
-
+    
     \theta_{mlp} = F_{exp}(\alpha_{exp};F_{uv})
     $$
 
@@ -202,6 +203,7 @@ description: (CVPR2021)通过网络内部的优化器迭代优化'face rig'：ri
 - 公式：
 
     ![alb](./riggable-3d-face-reconstruction/alb.png)
+    
     > bfm
 
 ## Learnable Optimization

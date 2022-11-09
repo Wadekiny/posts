@@ -67,7 +67,7 @@ description: (CVPR2020)通过GCN细化3DMM mesh：gcn-3d-face-reconstruction.md
         > A 3d face model for pose and illumination invariant face recognition. In 2009 Sixth IEEE International Conference on Advanced Video and Signal Based Surveillance, pages 296–301. Ieee, 2009
 
         > Facewarehouse: A 3d facial expression database for visual computing. IEEE Transactions on Visualization and Computer Graphics, 20(3):413–425, 2013.
- 
+
 
 
 - *FaceNet*: 
@@ -79,7 +79,7 @@ description: (CVPR2020)通过GCN细化3DMM mesh：gcn-3d-face-reconstruction.md
 
     - 作用：
         1. 作为embedding输入到后面的GCN Decoder中，生成网格顶点的反射率颜色
-
+    
         2. 用来构成一个LOSS项
 
 ## PCA
@@ -99,6 +99,7 @@ $$
 **GCN Refiner GCN Decoder**
 - Refiner就是一个图卷积，输入的是图结构，输出也是图结构
 - Decoder中，输入是FaceNet得到的特征向量，输出时每个顶点的RGB值。
+     
      > feature怎么转化成图的结构？
 - 都用了残差块
 
@@ -120,6 +121,7 @@ $$
 # LOSS
 
 - Pixel-wise Loss: 最小化输入图像和渲染图像之间的差异，由于可能有遮挡问题，所以只计算部分面部区域$M_{face}$的欧氏距离。这个面部区域是由预训练的面部分割网络获得的。
+    
     > (Face-to-parameter translation for game character auto-creation; Interactive facial feature localization.)
 
 ![loss1](.//home/wadekiny/face-reconstruction/gcn-3d-face-reconstruction/loss1.png)
@@ -151,7 +153,7 @@ $$
     \quad \\
     fixed:\quad \sigma_2 = 0.2, \sigma_3 = 0.001 \\
     Initially:\quad \sigma_1 =0, \sigma_4=1  \\
-    gradually:\quad \sigma_1 =1, \sigma_4=0 
+    gradually:\quad \sigma_1 =1, \sigma_4=0
     $$
 
 # Result
@@ -159,7 +161,6 @@ $$
 
 
 ![ablation](.//home/wadekiny/face-reconstruction/gcn-3d-face-reconstruction/ablation.png)
-
 
 
 
