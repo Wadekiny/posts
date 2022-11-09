@@ -4,7 +4,7 @@ mathjax: true
 tags: [paper, 3Dface, deeplearning]
 date: 2022-07-20 14:25:28
 categories: paper
-description: 3dfacereconstruction_abstracts.md
+description: 3dfacereconstruction-abstracts.md
 
 ---
 
@@ -20,8 +20,24 @@ description: 3dfacereconstruction_abstracts.md
 - dataset:
 - 输入：单张图片
 - 损失函数：
+
+    $L = L_{pose}+L_{recon_geo}+L_{ns\_geo}+\lambda_1L_{recon\_pho}+\lambda_2 L_\beta + \lambda_3L_{ns\_con}$
+
 - 提出的问题：
+
+    - 大部分专注于静态重建而不是个性化的face rig
+
 - 贡献：
+
+    - 将深度学习，网络内优化 和 face rig结合。
+
+    - 提出了一种基于单目图像的face rig重建方法。(支持视频输入)
+
+    - 通过估计个性化的face rig，使得本方法比静态重建(static reconstructions)表现要好，并且实现了下游应用，如视频重定向。
+
+    - 与之前直接回归Rig参数的方法不同，本文的in-network optimization 迭代求解rig参数，并受到第一原则(first-principles) 的约束(e.g. multi-view consistency, landmark alignment, and photo-metric reconstruction)。获得了更好的几何精度和泛化能力
+
+
 
 ![rig-frame](./riggable-3d-face-reconstruction/rig-frame.png)
 
@@ -135,6 +151,36 @@ $$
 ##### 渲染器(Rendering)
 
 - 输入S，T，姿态，反射率颜色，光照。渲染出2D图像。
+
+##### 判别器(discriminator)
+
+#### 损失函数
+
+- Pixel-wise Loss: 
+
+    最小化输入图像和渲染图像之间的差异，由于可能有遮挡问题，所以只计算部分面部区域$M_{face}$的欧氏距离。这个面部区域是由预训练的面部分割网络获得的。
+
+- Identity-Preserving Loss: 
+
+    重建的3D人脸可能**看起来不像**输入的2D人脸，特别是在某些**极端**情况下。因此定义了面部特征级别下的 LOSS。
+
+    >使用FaceNet，获得输入图像和渲染的2D图像的$feature$，计算余弦距离。
+
+- Vertex-wise Loss: 
+  - 训练GCN时，由于遮挡，可能无法正确的学习到顶点上的RGB值。
+  - 在GCN模块训练的早期阶段，构造顶点级别的损失函数，然后逐渐减少这个这个损失项的权重
+  - 包含两组：
+    1. regressor+pca生成的T，和GCN生成的T'
+    2. regressor+pca生成的T，映射回输入图像的颜色Tp，和GCN生成的T'在光照渲染下的颜色 $\tilde{T'}$(为了获得更多的面部细节)
+![gcnvloss](./3dfacereconstruction-abstracts/gcnvloss.png)
+
+- Adversarial LOSS
+    - 对抗损失
+
+#### 结果
+![result](.//home/wadekiny/face-reconstruction/gcn-3d-face-reconstruction/result.png)
+![ablation](.//home/wadekiny/face-reconstruction/gcn-3d-face-reconstruction/ablation.png)
+
 ### DECA
 #### 相关信息
 - SIGGRAPH2021: Learning an Animatable Detailed 3D Face ModTTel from In-The-Wild Images
@@ -371,7 +417,6 @@ Loss : $L_{ detail } = L_{phoD}+L_{mrf}+L_{sym}+L_{dc}+L_{regD}$
     - MICC(3d)
 - 输入: video
 - 损失函数：
-
 $$
 \mathcal{L}_{ph} + \lambda_1 \mathcal L_{kp} + \lambda_2 \mathcal L_{rg} \\
 \quad \\
@@ -401,46 +446,45 @@ $$
 
 
 #### CEST的流程
+1. 预测视点参数。 
 
-    1. 预测视点参数。 
+    包括空间上的旋转，平移，缩放因子。
 
-        包括空间上的旋转，平移，缩放因子。
+    $f_v(I;\theta_v):I\rightarrow v\in \mathbb R^7$
 
-        $f_v(I;\theta_v):I\rightarrow v\in \mathbb R^7$
+2. 预测形状参数。
 
-    2. 预测形状参数。
+    在预测形状前，排除尽可能多的视点信息是有益的，利用$\theta_v$,可以将图像对齐。
 
-        在预测形状前，排除尽可能多的视点信息是有益的，利用$\theta_v$,可以将图像对齐。
+    $f_s(I\circ v;\theta_s):I\circ v \rightarrow \alpha \in \mathbb R^{228*1}$
 
-        $f_s(I\circ v;\theta_s):I\circ v \rightarrow \alpha \in \mathbb R^{228*1}$
+3. 预测反照率。
 
-    3. 预测反照率。
+    先前的工作包括：
 
-        先前的工作包括：
+    - 基于预定义的模型，预测反照率参数
 
-        - 基于预定义的模型，预测反照率参数
+    - 预测UV图(CEST选用此方法)
 
-        - 预测UV图(CEST选用此方法)
+    - 图结构表示反射率
 
-        - 图结构表示反射率
+    预测反照率的流程
 
-        预测反照率的流程
+    1. 将预测得到的形状盖在脸上，把2d图片展成uv图 $T$
 
-        1. 将预测得到的形状盖在脸上，把2d图片展成uv图 $T$
+    2. 得到包含照明因素的uv图 $T$
 
-        2. 得到包含照明因素的uv图 $T$
+    3. 得到去除照明参数的uv图 $f_r(T;\theta_r):T\rightarrow A$
 
-        3. 得到去除照明参数的uv图 $f_r(T;\theta_r):T\rightarrow A$
+4. 预测照明参数。
 
-    4. 预测照明参数。
+    $f_l(I,T,A;\theta_l):(I,T,A) \rightarrow l\in \mathbb R^{9\times 1}$
 
-        $f_l(I,T,A;\theta_l):(I,T,A) \rightarrow l\in \mathbb R^{9\times 1}$
+5. 渲染2D图像，计算loss。
 
-    5. 渲染2D图像，计算loss。
+    $\hat I = \mathcal R(S,R,v,l)$
 
-        $\hat I = \mathcal R(S,R,v,l)$
-
-        分别代表渲染图像，渲染器，形状参数，反照率参数，视点参数，照明参数。
+    分别代表渲染图像，渲染器，形状参数，反照率参数，视点参数，照明参数。
 
 
 
@@ -468,10 +512,6 @@ $$
 - ECCV2022: Towards Metrical Reconstruction of Human Faces
 - 有代码，https://github.com/Zielon/MICA
 
-### HeadNeRF
-
-- CVPR 2022: eadNeRF: A Real-time NeRF-based Parametric Head Model
-- 无训练代码，https://github.com/CrisHY1995/headnerf
 
 # 非参数化建模
 
@@ -487,55 +527,23 @@ $$
 - 有代码，https://github.com/elliottwu/unsup3d
 
 
-# 基于深度图
 
 # 基于NERF
 
+### HeadNeRF
 
+- CVPR 2022: eadNeRF: A Real-time NeRF-based Parametric Head Model
+- 无训练代码，https://github.com/CrisHY1995/headnerf
 
+# 想法
+1. 眼睛、嘴唇、牙齿、头发的重建
+2. 3DMM模型参数空间维度较低，纹理模型比较简单，难以恢复高精度的人脸。PCA方法是否存在问题。
+3. 遮挡信息恢复
+4. 3DMM模型及其变种不能在各种场景下同时保持较好的性能
+5. 侧面角度重建
+6. 表情
+7. 多视角
+8. 无监督，除了映射回2D图有没有其他方法
+9. 怎么进行数据增强
+ 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# 几个方向
-1. 精细的面部特征，纹理，牙齿...(可能要添加额外的传感器)
-2. 让表情更和谐(GCN)?
-3. 侧面角度图片重建
-4. 任意角度小序列输入重建
-
-# abstracts
-
-## 2021
-
-### CVPR: Riggable 3D Face Reconstruction via In-Network Optimization 
-
-代码： https://github.com/zqbai-jeremy/INORig
-
-
-- 提出了一种基于单目图像的可装配三维人脸重建方法。
-- 联合估计个性化的 "人脸 rig" 和每幅图图像的参数（包括表情，姿势，照明）
-- 设计了一个端到端网络，嵌入了一个可微的网络优化器
-- 使用一个decoder: 人脸装备(face rig) -> 紧凑的潜在代码(compact latent code)，学习这个 latent code
-- 通过估计个性化的人脸装备，使得本方法比静态重建(static reconstructions)表现要好，并且实现了下游应用，如视频重定向。
-> 神魔是静态重建？
-
-### CVPR: 3DCaricShop: A Dataset and A Baseline Method for Single-view 3D Caricature Face Reconstruction
-- 从二维漫画重建三维漫画
-- 引入3DCaricShop，这是一个大规模的3D漫画数据集
-- 提出了一种单视角三维漫画重建的基线方法
-
-为了确保忠实地重建可信的脸部变形，
-我们建议将**详细的隐式函数**和**参数化的网格表示**的好端连接起来。
-
-1. 注册一个网格模板到implicit generator的输出上，并将注册结果迭代投射到预先训练好的PCA空间上，以解决伪影和自交的问题。
-2. 为了处理非刚性注册过程中的大变形，我们提出了一种新的视图协作图卷积网络（VCCCN），从隐式网格中提取关键点，以实现精确的对齐。 
-3. 我们的方法能够在预先定义的网格拓扑结构中生成高保真的三维漫画，并可用于动画制作。我们在3DCaricShop上进行了广泛的实验，以验证数据库的重要性和所提方法的有效性。我们将在发表后发布3DCaricShop。
