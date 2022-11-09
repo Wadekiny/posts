@@ -64,6 +64,13 @@ description: 3dfacereconstruction-abstracts.md
 - 提供的思路： GCN，顶点颜色
 - 自监督，面部重建，侧重于纹理
 - dataset:
+
+    - CelebA
+
+    - CelebA-HQ
+
+    - MICC(3d)
+
 - 输入：单张图片
 - 损失函数：
     $$
