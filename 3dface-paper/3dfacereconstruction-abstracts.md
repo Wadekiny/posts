@@ -13,6 +13,8 @@ description: 3dfacereconstruction-abstracts.md
 
 ### INORig 
 
+#### 相关信息
+
 - CVPR2021: Riggable 3D Face Reconstruction via In-Network Optimization
 - 无训练代码，https://github.com/zqbai-jeremy/INORig
 - 提供的思路：
@@ -44,16 +46,29 @@ description: 3dfacereconstruction-abstracts.md
 
 ### GANFit
 
+#### 相关信息
 - CVPR2019: GANFIT: Generative Adversarial Network Fitting for High Fidelity 3D Face Reconstruction
 - TPAMI 2021: Fast-GANFIT: Generative Adversarial Network for High Fidelity 3D Face Reconstruction 
 - 无代码，https://github.com/barisgecer/GANFit
-- 提供的思路：
+- 提供的思路：高分辨率+gan+uv图
 - 自监督，面部重建，侧重于纹理
 - dataset:
+    - MICC
+    - MoFA-Test
+    - 300W-3D
 - 输入：单张图片
-- 损失函数：
+- 损失函数：$L = L_{id} + L_{content} + L_{pixel}+L_{landmark}$
+
+    其中,content是人脸识别网络的中间层输出损失
+
 - 提出的问题：
 - 贡献：
+    - 大规模高分辨率基于UV图的重建(512\*512)
+    - GAN和3DMM结合
+    - 实现了高频细节重建
+
+![ganfit](./3dfacereconstruction-abstracts/ganfit.png)
+
 
 
 ### 3D-FACE-GCN
@@ -200,6 +215,8 @@ $$
     - BUPT-Balancedface [Wang et al. 2019] 
 
     - VoxCeleb2 [Chung et al. 2018a]
+
+    - NoW
 
     - 在两百万张图片(224\*224)上训练
 
@@ -501,8 +518,20 @@ $$
 ![cest-result0](./3dfacereconstruction-abstracts/cest-result0.png)
 
 ### 3D3M
+
+#### 相关信息
+
 - TMM2022: 3D3M: 3D Modulated Morphable Model for Monocular Face Reconstruction
 - 无代码
+- 对得到的3dmm参数进行随机混乱（不同脸之间），渲染出新的脸，再重新编码和渲染（用于自监督）
+- 自监督,侧重于几何形状 
+- 损失函数:
+    - 两阶段，
+    - 1：landmark+图像损失
+    - 2：用已经decode的参数，再encode，decode，比较第二次decode后的参数和第一次decode的参数。
+![3d3mframe](./3dfacereconstruction-abstracts/3d3mframe.png)
+
+
 
 ### GCN+GAN
 - CVPR2020: Uncertainty-Aware Mesh Decoder for High Fidelity 3D Face Reconstruction
@@ -512,22 +541,55 @@ $$
 - CVPR2020: ReDA:Reinforced Differentiable Attribute for 3D Face Reconstruction
 - 无代码
 
-- 有代码，https://github.com/TencentYoutuResearch/3DFaceReconstruction-LAP
 
 
 ### MICA
 - ECCV2022: Towards Metrical Reconstruction of Human Faces
 - 有代码，https://github.com/Zielon/MICA
-
+- 提供的思路：
+- 自监督，头部重建，侧重于几何形状
+- dataset:
+- 输入：
+- 损失函数：
+- 提出的问题：
+- 贡献：
 
 # 非参数化建模
 
 ### LAP
+
+#### 相关信息
+
 - CVPR2021: Learning to Aggregate and Personalize 3D Face from In-the-Wild Photo Collection
+- 有代码，https://github.com/TencentYoutuResearch/3DFaceReconstruction-LAP
+- 提供的思路：课程学习。计算深度图和rgb图
+- 自监督，人脸重建，侧重于纹理
+- dataset:
+    - CelebAMask-HQ
+    - CelebA
+    - CASIAWebFace
+    - 3DFAW(3d)
+- 输入：同一个人的不同人脸照片
+- 损失函数：分为两部分，对应于id重建和个性化重建
+- 提出的问题：
+- 贡献：
+    - 分离了id一致的人脸
+    - 较高的分辨率
+- 大致流程：两个阶段，先输入多个同id图片，学习id一致的人脸。第二步：根据特定人脸加入表情等个性化因素。
+
+![lapframe](./3dfacereconstruction-abstracts/lapframe.png)
+![lapcomp](./3dfacereconstruction-abstracts/lapcomp.png)
 
 ### Transformer 
+#### 相关信息
+
 - TCSVT2022: Transformer-based 3D Face Reconstruction with End-to-end Shape-preserved Domain Transfer
 - 无代码
+- 不同面部区域loss权重不同
+- gan生成图像训练
+
+![transformer](./3dfacereconstruction-abstracts/transformer.png)
+
 
 ### UNSUP3d
 - CVPR2020: Unsupervised Learning of Probably Symmetric Deformable 3D Objects from Images in the Wild
@@ -541,6 +603,9 @@ $$
 
 - CVPR 2022: eadNeRF: A Real-time NeRF-based Parametric Head Model
 - 无训练代码，https://github.com/CrisHY1995/headnerf
+
+
+
 
 # 想法
 1. 眼睛、嘴唇、牙齿、头发的重建

@@ -56,6 +56,7 @@ https://github.com/s0nny7/picom
 
 - 带动画的picom，会报错，动画不流畅
 https://github.com/jonaburg/picom
+    - 还有一个jonaburg-fix版本
 
 ## 配置picom
 `~/.config/picom/picom.conf`

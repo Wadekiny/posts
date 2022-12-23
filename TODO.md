@@ -68,10 +68,38 @@ ranger:select-editor
 
 
 
+sogou
+nvidia驱动
 
 
 
 
 
+
+
+
+dwm,i3获取窗口 
+xprop
+xwininfo
+notify-osd
+dunst!
+dunst要不要加到开机启动？
+vim:hex 16进制表示方法
+:set laststatus=2
+:set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
+dwm statusbar 日期部分显示异常，加正则表达式替换
+ cal | sed  's/_/test/g' | nvim
+：
+cal | sed 's/_^H/ /' | sed 's/  _^H/>/'
+正则替换每一个可能的清空
+dwm statusbar路径设置
+vim 正则表达式替换
+vim宏+1功能 c-a
+lsp
+clash for window
+wsl代理需要设置防火墙
+ip到底是哪个？
+
+easyconnect 打开导致不能git push
 
 
