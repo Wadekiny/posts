@@ -95,7 +95,7 @@ cal | sed 's/_^H/ /' | sed 's/  _^H/>/'
 dwm statusbar路径设置
 vim 正则表达式替换
 vim宏+1功能 c-a
-lsp
+ls20东蒙人工智能团支部p
 clash for window
 wsl代理需要设置防火墙
 ip到底是哪个？
@@ -103,3 +103,39 @@ ip到底是哪个？
 easyconnect 打开导致不能git push
 
 
+proxy打开后，pip install报错 https://blog.csdn.net/tuzixini/article/details/88203910
+mason 不能安装python-lanuage-server https://www.saoniuhuo.com/question/detail-2133503.htmlcli
+
+2022-12-23T16:57:49 Warning  WARN Client 1 quit with exit code 1 and signal 0 ,checkhealth,是不是有依赖不匹配
+
+
+1. kitty and Chinese
+2. Xauthority should be wadekiny's, instaed, login loop
+3. Nvidia driver should be 470.xxx. or black screen
+4. a lot of nvim stateline
+5. i3-gaps
+6. fcitx
+7. ranger kitty preview image
+8. i3 picom ,is updating
+9. betterlockscreen  need i3lock ..
+10. git speed up
+11. press mod+p to imput password
+12. filename from window will be wired
+13. kitty do not support chinese input method, rustup ,cargo and alacritty
+14. ranger default text editor
+15. 删除团员
+16. pynput need sudo apt install python3-tk python3-dev
+17. pyautogui 可以弹窗
+
+import pyautogui
+
+# 显示一个简单的带文字和OK按钮的消息弹窗。用户点击后返回button的文字。
+pyautogui.alert(text='', title='', button='OK')
+
+
+~/.fonts/ 添加字体文件，可以直接安装字体
+dunst是系统自带的
+/usr/share/xsession/dwm.desktop
+lsp
+dwm-statusbar有时候不显示，是因为temp里多了一对@,不知道为什么
+windows的zip文件在ubuntu解压乱码k
